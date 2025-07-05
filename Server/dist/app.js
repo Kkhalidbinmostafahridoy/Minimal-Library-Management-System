@@ -13,7 +13,7 @@ const errorHandler_1 = require("./utils/errorHandler");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
-    origin: ["https://minimal-library-management-system-c-fawn.vercel.app"],
+    origin: ["https://m-library-m-system-client.vercel.app"],
 }));
 app.use(express_1.default.json());
 // Log middleware
@@ -27,8 +27,5 @@ app.use("/api/borrows", borrowRoutes_1.default);
 app.get("/", (_req, res) => {
     res.send("Minimal Library Management System");
 });
-// Default route
-// app.get("/", (_req, res) => res.send("Minimal Library Management System"));
-// Global error handler
 app.use(errorHandler_1.errorHandler);
 exports.default = app;

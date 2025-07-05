@@ -10,7 +10,9 @@ mongoose
   .connect(MONGO_URI)
   .then(() => {
     app.listen(PORT, () =>
-      console.log(`Server running on http://localhost:${PORT}`)
+      console.log(
+        `Server running on https://m-library-m-system-client.vercel.app`
+      )
     );
   })
   .catch((err) => console.error("MongoDB connection error:", err));
