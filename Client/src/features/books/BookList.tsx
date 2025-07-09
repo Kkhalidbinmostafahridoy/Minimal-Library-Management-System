@@ -1,5 +1,3 @@
-// src/pages/BookList.tsx
-
 import React, { useState } from "react";
 import { Table, Button, Space, Tag, Spin, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +12,7 @@ export const BookList: React.FC = () => {
   const navigate = useNavigate();
   const { data, isLoading, isError } = useGetBooksQuery({
     page: 1,
-    limit: 100,
+    limit: 100, // Fetching a larger limit to simplify pagination for this example
   });
   const [borrowModalVisible, setBorrowModalVisible] = useState(false);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);

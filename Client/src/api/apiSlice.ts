@@ -28,6 +28,7 @@ export interface BorrowSummary {
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
+    // ❗ DEBUGGING STEP: Hardcoded the production URL
     baseUrl: "https://minimal-library-m-system-server.vercel.app/api",
   }),
   tagTypes: ["Book", "BorrowSummary"],
@@ -48,7 +49,6 @@ export const apiSlice = createApi({
 
     getBook: builder.query<Book, string>({
       query: (id) => `books/${id}`,
-
       providesTags: (_result, _error, id) => [{ type: "Book", id }],
     }),
 
@@ -67,31 +67,6 @@ export const apiSlice = createApi({
         method: "PATCH",
         body: patch,
       }),
-      async onQueryStarted(
-        { _id, ...patch },
-        { dispatch, queryFulfilled, getState }
-      ) {
-        // More robust optimistic update
-        const state = getState();
-        const queryArgs = state.api.queries[`getBooks`]?.originalArgs || {
-          page: 1,
-          limit: 10,
-        };
-
-        const patchResult = dispatch(
-          apiSlice.util.updateQueryData("getBooks", queryArgs, (draft) => {
-            const bookIndex = draft.books.findIndex((book) => book._id === _id);
-            if (bookIndex !== -1) {
-              Object.assign(draft.books[bookIndex], patch);
-            }
-          })
-        );
-        try {
-          await queryFulfilled;
-        } catch {
-          patchResult.undo();
-        }
-      },
       invalidatesTags: (_result, _error, { _id }) => [
         { type: "Book", id: _id },
         { type: "Book", id: "LIST" },
