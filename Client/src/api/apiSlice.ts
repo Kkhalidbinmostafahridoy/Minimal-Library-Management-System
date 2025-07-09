@@ -28,8 +28,8 @@ export interface BorrowSummary {
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    // ❗ DEBUGGING STEP: Hardcoded the production URL
-    baseUrl: "https://minimal-library-m-system-server.vercel.app/api",
+    // This line correctly uses the environment variable.
+    baseUrl: import.meta.env.VITE_API_URL,
   }),
   tagTypes: ["Book", "BorrowSummary"],
   endpoints: (builder) => ({
