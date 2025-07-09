@@ -1,5 +1,4 @@
 import { type Request, type Response, type NextFunction } from "express";
-// using  type Request, type Response as remove error for build
 
 export const errorHandler = (
   err: any,

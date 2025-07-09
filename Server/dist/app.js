@@ -13,7 +13,12 @@ const errorHandler_1 = require("./utils/errorHandler");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
-    origin: ["https://m-library-m-system-client.vercel.app"],
+    origin: [
+        "http://localhost:4173",
+        "http://localhost:5173",
+        "https://m-library-m-system-client.vercel.app",
+    ],
+    credentials: true,
 }));
 app.use(express_1.default.json());
 // Log middleware

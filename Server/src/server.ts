@@ -9,10 +9,6 @@ const MONGO_URI =
 mongoose
   .connect(MONGO_URI)
   .then(() => {
-    app.listen(PORT, () =>
-      console.log(
-        `Server running on https://m-library-m-system-client.vercel.app`
-      )
-    );
+    app.listen(PORT, () => console.log(`Server running on ${PORT}`));
   })
   .catch((err) => console.error("MongoDB connection error:", err));

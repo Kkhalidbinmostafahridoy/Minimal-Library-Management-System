@@ -25,11 +25,10 @@ export interface BorrowSummary {
   totalQuantityBorrowed: number;
 }
 
-export const apiSlice = createApi({
+export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    // This line correctly uses the environment variable.
-    baseUrl: import.meta.env.VITE_API_URL,
+    baseUrl: import.meta.env.VITE_API_URL, // ✅ dynamic, not hardcoded
   }),
   tagTypes: ["Book", "BorrowSummary"],
   endpoints: (builder) => ({
@@ -67,6 +66,31 @@ export const apiSlice = createApi({
         method: "PATCH",
         body: patch,
       }),
+      async onQueryStarted(
+        { _id, ...patch },
+        { dispatch, queryFulfilled, getState }
+      ) {
+        // More robust optimistic update
+        const state = getState();
+        const queryArgs = state.api.queries[`getBooks`]?.originalArgs || {
+          page: 1,
+          limit: 10,
+        };
+
+        const patchResult = dispatch(
+          api.util.updateQueryData("getBooks", queryArgs, (draft) => {
+            const bookIndex = draft.books.findIndex((book) => book._id === _id);
+            if (bookIndex !== -1) {
+              Object.assign(draft.books[bookIndex], patch);
+            }
+          })
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
       invalidatesTags: (_result, _error, { _id }) => [
         { type: "Book", id: _id },
         { type: "Book", id: "LIST" },
@@ -112,4 +136,4 @@ export const {
   useDeleteBookMutation,
   useBorrowBookMutation,
   useGetBorrowSummaryQuery,
-} = apiSlice;
+} = api;

@@ -12,9 +12,15 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["https://m-library-m-system-client.vercel.app"],
+    origin: [
+      "http://localhost:4173",
+      "http://localhost:5173",
+      "https://m-library-m-system-client.vercel.app",
+    ],
+    credentials: true,
   })
 );
+
 app.use(express.json());
 
 // Log middleware
